@@ -86,7 +86,7 @@ const Navbar = () => {
           <Link to="/about" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.about')}</Link>
           <Link to="/contact" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.contact')}</Link>
 
-          {user?.role === 'admin' && (
+          {(user?.role === 'admin' || user?.result?.role === 'admin') && (
             <Link to="/admin" className="nav-link admin-link" onClick={() => setIsMobileMenuOpen(false)}>
               <LayoutDashboard size={18} />
               <span>{t('nav.admin')}</span>
