@@ -60,7 +60,7 @@
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   left: 0;
   width: 0;
   height: 2px;
@@ -73,7 +73,7 @@
 }
 
 .admin-link {
-  color: #fbbf24 !important;
+  color: #fbbf24;
   display: flex;
   align-items: center;
   gap: 6px;
