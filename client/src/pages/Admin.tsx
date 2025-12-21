@@ -15,7 +15,7 @@ const Admin = () => {
   
   // Product Form State
   const [currentId, setCurrentId] = useState<string | null>(null);
-  const [productData, setProductData] = useState({ name: '', price: '', description: '', image: '', category: '' });
+  const [productData, setProductData] = useState({ name: '', price: '', description: '', image: '', additionalImages: '', category: '' });
 
   useEffect(() => {
     if (activeTab === 'products') loadProducts();
@@ -46,10 +46,15 @@ const Admin = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formattedData = {
+        ...productData,
+        additionalImages: productData.additionalImages.split(',').map(url => url.trim()).filter(url => url.length > 0)
+    };
+
     if (currentId) {
-        await updateProduct(currentId, productData);
+        await updateProduct(currentId, formattedData);
     } else {
-        await createProduct(productData);
+        await createProduct(formattedData);
     }
     clearForm();
     loadProducts();
@@ -57,7 +62,7 @@ const Admin = () => {
 
   const clearForm = () => {
       setCurrentId(null);
-      setProductData({ name: '', price: '', description: '', image: '', category: '' });
+      setProductData({ name: '', price: '', description: '', image: '', additionalImages: '', category: '' });
   };
 
   const handleEdit = (product: any) => {
@@ -66,7 +71,8 @@ const Admin = () => {
         name: product.name, 
         price: product.price, 
         description: product.description, 
-        image: product.image, 
+        image: product.image,
+        additionalImages: product.additionalImages ? product.additionalImages.join(', ') : '',
         category: product.category 
       });
       // Scroll to top of form
@@ -122,6 +128,7 @@ const Admin = () => {
               <input value={productData.price} onChange={(e) => setProductData({...productData, price: e.target.value})} placeholder={t('admin.ph.price')} type="number" required />
               <input value={productData.category} onChange={(e) => setProductData({...productData, category: e.target.value})} placeholder={t('admin.ph.category')} />
               <input value={productData.image} onChange={(e) => setProductData({...productData, image: e.target.value})} placeholder={t('admin.ph.image')} />
+              <textarea value={productData.additionalImages} onChange={(e) => setProductData({...productData, additionalImages: e.target.value})} placeholder="Ekstra Resim Linkleri (Virgülle ayırın)" style={{height: '80px'}} />
               <textarea value={productData.description} onChange={(e) => setProductData({...productData, description: e.target.value})} placeholder={t('admin.ph.desc')} />
               
               <div style={{ display: 'flex', gap: '10px' }}>

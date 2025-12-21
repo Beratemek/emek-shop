@@ -69,11 +69,11 @@ app.post('/api/products', async (req, res) => {
 
 app.put('/api/products/:id', async (req, res) => {
   const { id } = req.params;
-  const { name, price, description, image, category, isFeatured } = req.body;
+  const { name, price, description, image, additionalImages, category, isFeatured } = req.body;
   
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No product with id: ${id}`);
 
-  const updatedProduct = { name, price, description, image, category, isFeatured, _id: id };
+  const updatedProduct = { name, price, description, image, additionalImages, category, isFeatured, _id: id };
   await Product.findByIdAndUpdate(id, updatedProduct, { new: true });
   res.json(updatedProduct);
 });

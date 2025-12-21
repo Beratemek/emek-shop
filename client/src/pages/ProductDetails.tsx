@@ -14,12 +14,16 @@ const ProductDetails = () => {
     const [product, setProduct] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
     useEffect(() => {
         const getProduct = async () => {
             try {
                 if (id) {
                     const { data } = await fetchProduct(id);
                     setProduct(data);
+                    // Reset selected image when product changes (or let it fallback to product.image)
+                    setSelectedImage(null);
                 }
             } catch (error) {
                 console.log(error);
@@ -33,6 +37,10 @@ const ProductDetails = () => {
     if (loading) return <div className="container" style={{marginTop: '100px', textAlign: 'center', color: 'white'}}>Loading...</div>;
     if (!product) return <div className="container" style={{marginTop: '100px', textAlign: 'center', color: 'white'}}>Product not found</div>;
 
+    const allImages = product.additionalImages && product.additionalImages.length > 0 
+        ? [product.image, ...product.additionalImages] 
+        : null;
+
     return (
         <div className="container product-details-page">
             <button onClick={() => navigate(-1)} className="back-btn">
@@ -40,8 +48,24 @@ const ProductDetails = () => {
             </button>
 
             <div className="product-details-grid glass">
-                <div className="detail-image">
-                     <img src={product.image || "https://via.placeholder.com/500"} alt={product.name} />
+                <div className="detail-image-container">
+                    <div className="detail-image">
+                         <img src={selectedImage || product.image || "https://via.placeholder.com/500"} alt={product.name} />
+                    </div>
+                    
+                    {allImages && (
+                        <div className="thumbnails-grid">
+                            {allImages.map((img: string, index: number) => (
+                                <div 
+                                    key={index} 
+                                    className={`thumbnail ${selectedImage === img || (!selectedImage && index === 0) ? 'active' : ''}`}
+                                    onClick={() => setSelectedImage(img)}
+                                >
+                                    <img src={img} alt={`View ${index + 1}`} />
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 
                 <div className="detail-info">
