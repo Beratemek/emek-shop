@@ -1,4 +1,4 @@
-import { ShoppingCart, Gift, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { ShoppingCart, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
@@ -22,7 +22,7 @@ const Navbar = () => {
       <div className="container nav-content">
         {/* Logo Section */}
         <Link to="/" className="brand">
-          <Gift className="brand-icon" size={28} color="var(--accent-gold)" />
+          <img src="/logo.png" alt="EmekShop" className="brand-logo" />
           <span className="brand-name">EmekShop</span>
         </Link>
 
