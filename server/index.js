@@ -128,6 +128,7 @@ app.get('/api/orders', async (req, res) => {
 // Database Connection
 const CONNECTION_URL = process.env.CONNECTION_URL || 'mongodb+srv://emekshop:Emekshop123@cluster0.mongodb.net/emekshop?retryWrites=true&w=majority';
 const PORT = process.env.PORT || 5001;
+console.log(`Port Configuration: process.env.PORT is ${process.env.PORT ? 'SET to ' + process.env.PORT : 'NOT SET. Using default ' + PORT}`);
 
 if (!process.env.CONNECTION_URL) {
     console.log('UYARI: .env dosyası bulunamadı veya CONNECTION_URL tanımlı değil. Default bağlantı adresi kullanılıyor.');
