@@ -4,7 +4,8 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  background-color: #0b1120; /* Solid dark background */
+  background-color: rgba(11, 17, 32, 0.95); /* Slight transparency for glass effect */
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0;
   height: 80px;
@@ -18,6 +19,9 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 /* Brand */
@@ -40,16 +44,18 @@
   color: transparent;
 }
 
-/* Center Links */
+/* Center Links (Desktop) */
 .nav-center {
   display: flex;
   gap: 40px;
+  align-items: center;
 }
 
 .nav-link {
   color: #94a3b8;
   font-size: 0.95rem;
   font-weight: 500;
+  text-decoration: none;
   transition: all 0.2s ease;
   padding: 5px 0;
   position: relative;
@@ -81,7 +87,7 @@
   gap: 6px;
 }
 
-/* Right Actions */
+/* Right Actions (Desktop) */
 .nav-actions {
   display: flex;
   align-items: center;
@@ -96,6 +102,7 @@
   background: rgba(255,255,255,0.05);
   padding: 5px 10px;
   border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 .lang-btn {
@@ -105,12 +112,18 @@
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
-  transition: color 0.2s;
-  padding: 4px;
+  transition: all 0.2s;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.lang-btn:hover {
+  color: #e2e8f0;
 }
 
 .lang-btn.active {
-  color: #fff;
+  color: #0b1120;
+  background-color: #fbbf24;
 }
 
 .divider {
@@ -133,6 +146,7 @@
   font-size: 0.9rem;
   padding: 8px 16px;
   border-radius: 6px;
+  text-decoration: none;
   transition: background 0.2s;
 }
 
@@ -149,6 +163,8 @@
 .user-name {
   color: #e2e8f0;
   font-size: 0.9rem;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .icon-btn {
@@ -157,6 +173,9 @@
   color: #94a3b8;
   cursor: pointer;
   transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon-btn:hover {
@@ -176,12 +195,14 @@
   color: #000;
   cursor: pointer;
   position: relative;
+  text-decoration: none;
   transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(251, 191, 36, 0.2);
 }
 
 .cart-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  box-shadow: 0 6px 15px rgba(251, 191, 36, 0.4);
 }
 
 .cart-count {
@@ -201,80 +222,138 @@
   border: 2px solid #0b1120;
 }
 
-/* Mobile Responsiveness & Hamburger Menu */
-.mobile-actions, .mobile-menu-footer {
+/* Default State: Hidden on Desktop */
+.mobile-actions, .mobile-menu-footer, .mobile-menu-btn {
   display: none;
 }
 
+/* Hamburger Styles */
 .mobile-menu-btn {
-  display: none; /* Hidden on desktop */
   background: none;
   border: none;
   cursor: pointer;
   z-index: 1001;
+  padding: 5px;
 }
 
 .hamburger {
   display: block;
-  width: 25px;
-  height: 3px;
+  width: 24px;
+  height: 2px;
   background-color: #fff;
   position: relative;
   transition: all 0.3s ease-in-out;
+  border-radius: 2px;
 }
 
 .hamburger::before,
 .hamburger::after {
   content: '';
   position: absolute;
-  width: 25px;
-  height: 3px;
+  width: 24px;
+  height: 2px;
   background-color: #fff;
   transition: all 0.3s ease-in-out;
+  border-radius: 2px;
+  left: 0;
 }
 
-.hamburger::before { transform: translateY(-8px); }
-.hamburger::after { transform: translateY(8px); }
+.hamburger::before { transform: translateY(-7px); }
+.hamburger::after { transform: translateY(7px); }
 
-/* Hamburger Animation */
 .hamburger.open { background-color: transparent; }
 .hamburger.open::before { transform: rotate(45deg); }
 .hamburger.open::after { transform: rotate(-45deg); }
 
-  /* Hide desktop actions on mobile */
+/* --- Mobile Styles (max-width: 768px) --- */
+@media (max-width: 768px) {
+  /* 1. Hide Desktop Elements */
   .desktop-actions {
     display: none !important;
   }
 
-  /* Mobile Header Actions (Right side) */
+  /* 2. Show Mobile Elements */
   .mobile-actions {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 15px;
   }
-
-  .mobile-cart {
-    display: flex !important;
+  
+  .mobile-menu-btn {
+    display: block !important;
   }
 
-  /* Mobile Menu Footer */
-  .mobile-menu-footer {
-    margin-top: auto;
-    margin-bottom: 50px;
+  /* 3. Adjust Navbar Container */
+  .nav-content {
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+  
+  .brand-name {
+    font-size: 1.5rem; /* Slightly smaller for mobile */
+  }
+
+  /* 4. Mobile Menu Overlay */
+  .nav-center {
+    position: fixed;
+    top: 80px;
+    left: -100%; /* Start hidden off-screen */
+    width: 100%;
+    height: calc(100vh - 80px);
+    background-color: rgba(11, 17, 32, 0.98);
+    backdrop-filter: blur(15px);
+    
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    justify-content: flex-start;
+    padding-top: 40px;
+    gap: 30px;
+    
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    z-index: 999;
+    overflow-y: auto;
+  }
+
+  .nav-center.active {
+    left: 0; /* Slide in */
+  }
+
+  /* 5. Mobile Menu Links */
+  .nav-link {
+    font-size: 1.25rem;
     width: 100%;
-    padding-top: 20px;
+    text-align: center;
+    padding: 12px 0;
+    color: #cbd5e1;
+  }
+  
+  .nav-link:hover {
+    color: #fbbf24;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .nav-link::after {
+    display: none; /* Remove underline animation on mobile for cleaner look */
+  }
+
+  /* 6. Mobile Menu Footer (Lang & Auth) */
+  .mobile-menu-footer {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    margin-top: auto;
+    margin-bottom: 80px;
+    width: 85%;
+    padding-top: 30px;
     border-top: 1px solid rgba(255,255,255,0.1);
   }
-
-  .mobile-lang {
-    justify-content: center;
-  }
-
-  .mobile-auth {
-    justify-content: center;
+  
+  .lang-switcher.mobile-lang {
+    background: rgba(255,255,255,0.03);
+    padding: 8px 16px;
+    border-radius: 30px;
   }
 }
