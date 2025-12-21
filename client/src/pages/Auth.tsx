@@ -9,13 +9,18 @@ const Auth = ({ isSignup }: { isSignup: boolean }) => {
   const { login, register } = useAuth();
   const { t } = useLanguage();
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSignup) {
-       if(formData.password !== formData.confirmPassword) return alert(t('auth.passwordMismatch'));
-       register(formData);
-    } else {
-       login(formData);
+    try {
+      if (isSignup) {
+         if(formData.password !== formData.confirmPassword) return alert(t('auth.passwordMismatch'));
+         await register(formData);
+      } else {
+         await login(formData);
+      }
+    } catch (error) {
+      console.log('AUTH ERROR:', error);
+      alert('Authentication failed. Check console for details.');
     }
   };
 
