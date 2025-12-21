@@ -6,10 +6,10 @@ const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 
 // Routes
-// const authRoutes = require('./routes/auth');
-// const Product = require('./models/product');
-// const User = require('./models/user');
-// const Order = require('./models/order');
+const authRoutes = require('./routes/auth');
+const Product = require('./models/product');
+const User = require('./models/user');
+const Order = require('./models/order');
 
 dotenv.config();
 
@@ -21,11 +21,11 @@ app.use(express.json());
 // Routes
 // Routes
 // Routes
-// const userRoutes = require('./routes/users.js');
-// app.use('/api/auth', authRoutes);
-// app.use('/api/users', userRoutes);
-// const messageRoutes = require('./routes/messages');
-// app.use('/api/messages', messageRoutes);
+const userRoutes = require('./routes/users.js');
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+const messageRoutes = require('./routes/messages');
+app.use('/api/messages', messageRoutes);
 
 // --- Public Product Routes ---
 app.get('/api/products', async (req, res) => {
