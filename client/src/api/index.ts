@@ -1,4 +1,3 @@
-```typescript
 import axios from 'axios';
 
 const API = axios.create({ baseURL: 'https://emek-shop-production.up.railway.app/api' });
