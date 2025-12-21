@@ -161,8 +161,17 @@ mongoose.connect(CONNECTION_URL)
   })
   .catch((error) => console.log('MongoDB Connection Error:', error.message));
 
-app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
+// 1. Railway sets process.env.PORT automatically. We MUST use it.
+const PORT = process.env.PORT || 5001;
+
+console.log('Attempting to start server...');
+console.log(`Configured PORT: ${PORT}`);
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server successfully started on port ${PORT}`);
+    console.log(`Health check available at http://0.0.0.0:${PORT}/`);
+});
 
 app.get('/', (req, res) => {
-    res.send('EmekShop BackEnd is Running. Status: Active');
+    res.status(200).send('EmekShop BackEnd is Active!');
 });
