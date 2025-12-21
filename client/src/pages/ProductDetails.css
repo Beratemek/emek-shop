@@ -78,6 +78,7 @@
     line-height: 1.8;
     font-size: 1.1rem;
     margin-bottom: 40px;
+    white-space: pre-wrap; /* Preserve line breaks and whitespace */
 }
 
 .add-to-cart-btn.large {
