@@ -198,6 +198,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  border: 2px solid #0b1120;
+}
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
@@ -238,4 +240,5 @@
   .admin-link span {
       display: inline; /* Keep it visible for now */
   }
+}
 }
