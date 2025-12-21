@@ -30,10 +30,10 @@
 }
 
 .brand-logo {
-  height: 42px;
+  height: 55px; /* Increased size */
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.4));
+  /* Removed glow filter */
 }
 
 .brand-name {
@@ -41,11 +41,7 @@
   font-weight: 800;
   letter-spacing: -0.5px;
   color: #fff;
-  background: linear-gradient(to right, #fff, #fbbf24);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  /* Removed bright gradient, kept clean text as requested mostly 'too shiny' */
 }
 
 /* Center Links (Desktop) */
