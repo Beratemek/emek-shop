@@ -34,8 +34,10 @@
   letter-spacing: -0.5px;
   color: #fff;
   background: linear-gradient(to right, #fff, #fbbf24);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 /* Center Links */
