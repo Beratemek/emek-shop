@@ -348,7 +348,7 @@
     align-items: center;
     gap: 25px;
     margin-top: auto;
-    margin-bottom: 80px;
+    margin-bottom: 30px; /* Reduced from 80px to move it up */
     width: 85%;
     padding-top: 30px;
     border-top: 1px solid rgba(255,255,255,0.1);
