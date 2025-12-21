@@ -1,6 +1,13 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'https://emek-shop-production.up.railway.app/api' });
+const getBaseUrl = () => {
+  if (window.location.hostname === 'localhost') {
+    return 'http://localhost:5001/api';
+  }
+  return 'https://emek-shop-production.up.railway.app/api';
+};
+
+const API = axios.create({ baseURL: getBaseUrl() });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('profile')) {
