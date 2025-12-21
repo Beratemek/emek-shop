@@ -2,7 +2,7 @@
   "name": "emek-shop-root",
   "version": "1.0.0",
   "scripts": {
-    "start": "cd server && npm install && npm start",
+    "start": "cd server && npm install --production && node index.js",
     "build": "cd server && npm install"
   },
   "engines": {
