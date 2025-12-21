@@ -95,12 +95,6 @@ const Navbar = () => {
 
           {/* Mobile Menu Footer Actions */}
           <div className="mobile-menu-footer">
-             <div className="lang-switcher mobile-lang">
-                <button className={`lang-btn ${language === 'tr' ? 'active' : ''}`} onClick={() => setLanguage('tr')}>TR</button>
-                <span className="divider">|</span>
-                <button className={`lang-btn ${language === 'en' ? 'active' : ''}`} onClick={() => setLanguage('en')}>EN</button>
-              </div>
-
                <div className="auth-actions mobile-auth">
                 {user ? (
                   <div className="user-profile">
@@ -115,6 +109,12 @@ const Navbar = () => {
                     <span>{t('auth.signIn')}</span>
                   </Link>
                 )}
+              </div>
+
+             <div className="lang-switcher mobile-lang">
+                <button className={`lang-btn ${language === 'tr' ? 'active' : ''}`} onClick={() => setLanguage('tr')}>TR</button>
+                <span className="divider">|</span>
+                <button className={`lang-btn ${language === 'en' ? 'active' : ''}`} onClick={() => setLanguage('en')}>EN</button>
               </div>
           </div>
         </div>
