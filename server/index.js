@@ -126,8 +126,12 @@ app.get('/api/orders', async (req, res) => {
 
 
 // Database Connection
-const CONNECTION_URL = process.env.CONNECTION_URL;
-const PORT = process.env.PORT || 5000;
+const CONNECTION_URL = process.env.CONNECTION_URL || 'mongodb+srv://emekshop:Emekshop123@cluster0.mongodb.net/emekshop?retryWrites=true&w=majority';
+const PORT = process.env.PORT || 5001;
+
+if (!process.env.CONNECTION_URL) {
+    console.log('UYARI: .env dosyası bulunamadı veya CONNECTION_URL tanımlı değil. Default bağlantı adresi kullanılıyor.');
+}
 
 // --- Seed Admin User ---
 const seedAdmin = async () => {
