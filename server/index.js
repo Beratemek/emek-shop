@@ -155,22 +155,15 @@ const seedAdmin = async () => {
     }
 };
 
+// Mongoose connection - FIRE AND FORGET approach for debugging
+console.log('Attempting MongoDB connection in background...');
 mongoose.connect(CONNECTION_URL)
-  .then(() => {
-      console.log('Connected to MongoDB');
-      seedAdmin();
-  })
-  .catch((error) => console.log('MongoDB Connection Error:', error.message));
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((error) => console.error('MongoDB Connection Error:', error.message));
 
-// 1. Railway sets process.env.PORT automatically. We MUST use it.
-const PORT = process.env.PORT || 5001;
-
-console.log('Attempting to start server...');
-console.log(`Configured PORT: ${PORT}`);
-
-app.listen(PORT, '0.0.0.0', () => {
+// Start server IMMEDIATELY, do not wait for DB
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server successfully started on port ${PORT}`);
-    console.log(`Health check available at http://0.0.0.0:${PORT}/`);
 });
 
 app.get('/', (req, res) => {
