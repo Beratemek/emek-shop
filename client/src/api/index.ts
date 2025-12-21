@@ -24,6 +24,8 @@ export const deleteProduct = (id: string) => API.delete(`/products/${id}`);
 
 export const signIn = (formData: any) => API.post('/auth/login', formData);
 export const signUp = (formData: any) => API.post('/auth/register', formData);
+export const forgotPassword = (email: string) => API.post('/auth/forgotPassword', { email });
+export const resetPassword = (token: string, password: string) => API.post(`/auth/resetPassword/${token}`, { password });
 
 export const fetchUsers = () => API.get('/users');
 export const updateUser = (id: string, formData: any) => API.patch(`/users/${id}`, formData);

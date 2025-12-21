@@ -75,6 +75,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
+import ResetPassword from './pages/ResetPassword';
 import Profile from './pages/Profile';
 import Cart from './pages/Cart';
 
@@ -100,6 +101,8 @@ function App() {
                  <Route path="/cart" element={<Cart />} />
                  <Route path="/login" element={<Auth isSignup={false} />} />
                  <Route path="/register" element={<Auth isSignup={true} />} />
+                 <Route path="/auth" element={<Auth isSignup={false} />} />
+                 <Route path="/auth/resetpassword/:token" element={<ResetPassword />} />
                  <Route path="/admin" element={<Admin />} />
               </Routes>
             </div>

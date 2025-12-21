@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
+import * as api from '../api/index';
 import './Auth.css';
 
 const Auth = ({ isSignup }: { isSignup: boolean }) => {
@@ -28,6 +29,47 @@ const Auth = ({ isSignup }: { isSignup: boolean }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+          await api.forgotPassword(resetEmail);
+          setResetMessage('Şifre sıfırlama linki e-posta adresinize gönderildi.');
+      } catch (error) {
+          console.log(error);
+          setResetMessage('Bir hata oluştu. Lütfen tekrar deneyiniz.');
+      }
+  };
+
+  if (showForgotPassword) {
+      return (
+        <div className="auth-container">
+          <div className="auth-card glass">
+            <h2>Şifremi Unuttum</h2>
+            {resetMessage && <p style={{color: 'green', marginBottom: '10px'}}>{resetMessage}</p>}
+            <form onSubmit={handleForgotPassword}>
+                <div className="input-group">
+                    <input 
+                        type="email" 
+                        placeholder="E-posta Adresiniz" 
+                        value={resetEmail}
+                        onChange={(e) => setResetEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit" className="auth-btn">Link Gönder</button>
+                <button type="button" className="auth-btn" onClick={() => setShowForgotPassword(false)} style={{marginTop: '10px'}}>
+                    Giriş Sayfasına Dön
+                </button>
+            </form>
+          </div>
+        </div>
+      );
+  }
+
   return (
     <div className="auth-container">
       <div className="auth-card glass">
@@ -51,6 +93,17 @@ const Auth = ({ isSignup }: { isSignup: boolean }) => {
           )}
           <button type="submit" className="auth-btn">{isSignup ? t('auth.signUp') : t('auth.signIn')}</button>
         </form>
+        
+        {!isSignup && (
+            <button 
+                type="button" 
+                style={{background: 'none', border: 'none', color: '#fbbf24', marginTop: '10px', cursor: 'pointer', textDecoration: 'underline'}}
+                onClick={() => setShowForgotPassword(true)}
+            >
+                Şifremi Unuttum
+            </button>
+        )}
+
         <div className="auth-switch">
             {isSignup ? t('auth.alreadyAccount') : t('auth.noAccount')}
             <Link to={isSignup ? '/login' : '/register'}>
