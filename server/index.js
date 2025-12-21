@@ -155,7 +155,13 @@ const seedAdmin = async () => {
 
 mongoose.connect(CONNECTION_URL)
   .then(() => {
+      console.log('Connected to MongoDB');
       seedAdmin();
-      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
-  .catch((error) => console.log(error.message));
+  .catch((error) => console.log('MongoDB Connection Error:', error.message));
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.get('/', (req, res) => {
+    res.send('EmekShop BackEnd is Running. Status: Active');
+});
