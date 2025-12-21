@@ -1,3 +1,4 @@
+console.log(`[Startup] Starting server... Environment PORT: ${process.env.PORT}`);
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
