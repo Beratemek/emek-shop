@@ -6,10 +6,10 @@ const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 
 // Routes
-const authRoutes = require('./routes/auth');
-const Product = require('./models/product');
-const User = require('./models/user');
-const Order = require('./models/order');
+// const authRoutes = require('./routes/auth');
+// const Product = require('./models/product');
+// const User = require('./models/user');
+// const Order = require('./models/order');
 
 dotenv.config();
 
@@ -20,11 +20,12 @@ app.use(express.json());
 
 // Routes
 // Routes
-const userRoutes = require('./routes/users.js');
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-const messageRoutes = require('./routes/messages');
-app.use('/api/messages', messageRoutes);
+// Routes
+// const userRoutes = require('./routes/users.js');
+// app.use('/api/auth', authRoutes);
+// app.use('/api/users', userRoutes);
+// const messageRoutes = require('./routes/messages');
+// app.use('/api/messages', messageRoutes);
 
 // --- Public Product Routes ---
 app.get('/api/products', async (req, res) => {
@@ -157,9 +158,9 @@ const seedAdmin = async () => {
 
 // Mongoose connection - FIRE AND FORGET approach for debugging
 console.log('Attempting MongoDB connection in background...');
-mongoose.connect(CONNECTION_URL)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((error) => console.error('MongoDB Connection Error:', error.message));
+// mongoose.connect(CONNECTION_URL)
+//   .then(() => console.log('Connected to MongoDB'))
+//   .catch((error) => console.error('MongoDB Connection Error:', error.message));
 
 // Start server IMMEDIATELY, do not wait for DB
 const server = app.listen(PORT, '0.0.0.0', () => {
