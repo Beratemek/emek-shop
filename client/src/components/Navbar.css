@@ -4,8 +4,7 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  background-color: rgba(11, 17, 32, 0.95); /* Slight transparency for glass effect */
-  backdrop-filter: blur(12px);
+  background-color: #0b1120; /* Solid background for stability on desktop */
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0;
   height: 80px;
@@ -19,9 +18,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 40px; /* More breathing room on desktop */
 }
 
 /* Brand */
@@ -267,6 +264,12 @@
 
 /* --- Mobile Styles (max-width: 768px) --- */
 @media (max-width: 768px) {
+  /* Mobile Navbar Style (Glass Effect) */
+  .navbar {
+    background-color: rgba(11, 17, 32, 0.95);
+    backdrop-filter: blur(12px);
+  }
+
   /* 1. Hide Desktop Elements */
   .desktop-actions {
     display: none !important;
