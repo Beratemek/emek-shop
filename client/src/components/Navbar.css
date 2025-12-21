@@ -201,44 +201,72 @@
   border: 2px solid #0b1120;
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  .navbar {
-    height: auto;
-    padding: 10px 0;
-  }
-  
-  .navbar-content { /* Assuming the container class inside navbar is named .nav-content or similar, based on view_file it is .nav-content */
-    flex-direction: column;
-    gap: 15px;
-    padding: 10px;
-  }
-  
-  .nav-content {
-      flex-direction: column;
-      gap: 15px;
-  }
-
-  .nav-center { /* The links container */
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    width: 100%;
-  }
-
-  .nav-actions {
-    width: 100%;
-    justify-content: center;
-    margin-top: 5px;
-  }
-
-  .brand-name {
-    font-size: 1.5rem;
-  }
-  
-  /* Hide Admin Link text on mobile to save space if needed, or make it smaller */
-  .admin-link span {
-      display: inline; /* Keep it visible for now */
-  }
+/* Mobile Responsiveness & Hamburger Menu */
+.mobile-menu-btn {
+  display: none; /* Hidden on desktop */
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
 }
+
+.hamburger {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger::before,
+.hamburger::after {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger::before { transform: translateY(-8px); }
+.hamburger::after { transform: translateY(8px); }
+
+/* Hamburger Animation */
+.hamburger.open { background-color: transparent; }
+.hamburger.open::before { transform: rotate(45deg); }
+.hamburger.open::after { transform: rotate(-45deg); }
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .nav-center {
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 80px);
+    background-color: #0b1120;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 50px;
+    gap: 30px;
+    transition: left 0.3s ease-in-out;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .nav-center.active {
+    left: 0;
+  }
+
+  .nav-link {
+    font-size: 1.2rem;
+  }
+
+  .admin-link span {
+    display: inline;
+  }
 }

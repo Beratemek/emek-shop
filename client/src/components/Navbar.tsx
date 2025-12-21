@@ -3,12 +3,19 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
+import { useState } from 'react'; // Added useState import
 import './Navbar.css';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const { itemCount } = useCart();
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Added state for mobile menu
+
+  const toggleMobileMenu = () => { // Added toggle function for mobile menu
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <nav className="navbar">
@@ -20,15 +27,24 @@ const Navbar = () => {
         </Link>
 
         {/* Navigation Links */}
-        <div className="nav-center">
-          <Link to="/" className="nav-link">{t('nav.home')}</Link>
-          <Link to="/products" className="nav-link">{t('nav.products')}</Link>
-          <Link to="/about" className="nav-link">{t('nav.about')}</Link>
-          <Link to="/contact" className="nav-link">{t('nav.contact')}</Link>
-          {user?.result?.role === 'admin' && (
-              <Link to="/admin" className="nav-link admin-link">
-                  <LayoutDashboard size={18}/> {t('nav.adminPanel')}
-              </Link>
+
+        {/* Mobile Menu Button */}
+        <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
+          <span className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}></span>
+        </button>
+
+        {/* Center Links - Toggle class based on state */}
+        <div className={`nav-center ${isMobileMenuOpen ? 'active' : ''}`}>
+          <Link to="/" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.home')}</Link>
+          <Link to="/products" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Ürünler</Link>
+          <Link to="/about" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.about')}</Link>
+          <Link to="/contact" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.contact')}</Link>
+
+          {user?.role === 'admin' && (
+            <Link to="/admin" className="nav-link admin-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <LayoutDashboard /> {/* Assuming FashieldAlt was a typo and LayoutDashboard is intended or FashieldAlt needs to be imported */}
+              <span>{t('nav.admin')}</span>
+            </Link>
           )}
         </div>
 
