@@ -198,5 +198,44 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: 2px solid #0b1120;
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .navbar {
+    height: auto;
+    padding: 10px 0;
+  }
+  
+  .navbar-content { /* Assuming the container class inside navbar is named .nav-content or similar, based on view_file it is .nav-content */
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+  }
+  
+  .nav-content {
+      flex-direction: column;
+      gap: 15px;
+  }
+
+  .nav-center { /* The links container */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .nav-actions {
+    width: 100%;
+    justify-content: center;
+    margin-top: 5px;
+  }
+
+  .brand-name {
+    font-size: 1.5rem;
+  }
+  
+  /* Hide Admin Link text on mobile to save space if needed, or make it smaller */
+  .admin-link span {
+      display: inline; /* Keep it visible for now */
+  }
 }

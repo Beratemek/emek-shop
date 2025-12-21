@@ -25,6 +25,16 @@
   margin: 20px auto;
 }
 
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+  .hero p {
+    font-size: 1rem;
+    padding: 0 20px;
+  }
+}
+
 .cta-button {
   background: var(--accent-gold);
   color: #000;
