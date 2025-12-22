@@ -61,10 +61,10 @@ const adminMiddleware = async (req, res, next) => {
 app.post('/api/products', async (req, res) => {
   let product = req.body;
   
-  // Ensure additionalImages is an array
+  // Ensure additionalImages is an array (split by newline)
   if (product.additionalImages && !Array.isArray(product.additionalImages)) {
     if (typeof product.additionalImages === 'string') {
-      product.additionalImages = product.additionalImages.split(',').map(url => url.trim()).filter(url => url.length > 0);
+      product.additionalImages = product.additionalImages.split('\n').map(url => url.trim()).filter(url => url.length > 0);
     } else {
       product.additionalImages = [];
     }
@@ -85,11 +85,11 @@ app.put('/api/products/:id', async (req, res) => {
   
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No product with id: ${id}`);
 
-  // Ensure additionalImages is an array
+  // Ensure additionalImages is an array (split by newline)
   if (additionalImages && !Array.isArray(additionalImages)) {
-    // If it's a string, split by comma
+    // If it's a string, split by newline
     if (typeof additionalImages === 'string') {
-      additionalImages = additionalImages.split(',').map(url => url.trim()).filter(url => url.length > 0);
+      additionalImages = additionalImages.split('\n').map(url => url.trim()).filter(url => url.length > 0);
     } else {
       additionalImages = [];
     }

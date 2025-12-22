@@ -48,7 +48,7 @@ const Admin = () => {
     e.preventDefault();
     const formattedData = {
         ...productData,
-        additionalImages: productData.additionalImages.split(',').map(url => url.trim()).filter(url => url.length > 0)
+        additionalImages: productData.additionalImages.split('\n').map(url => url.trim()).filter(url => url.length > 0)
     };
 
     if (currentId) {
@@ -72,7 +72,7 @@ const Admin = () => {
         price: product.price, 
         description: product.description, 
         image: product.image,
-        additionalImages: product.additionalImages ? product.additionalImages.join(', ') : '',
+        additionalImages: product.additionalImages ? product.additionalImages.join('\n') : '',
         category: product.category,
         paymentLink: product.paymentLink || ''
       });
@@ -130,7 +130,7 @@ const Admin = () => {
               <input value={productData.category} onChange={(e) => setProductData({...productData, category: e.target.value})} placeholder={t('admin.ph.category')} />
               <input value={productData.image} onChange={(e) => setProductData({...productData, image: e.target.value})} placeholder={t('admin.ph.image')} />
               <input value={productData.paymentLink} onChange={(e) => setProductData({...productData, paymentLink: e.target.value})} placeholder="Ödeme Linki (Tami/Shopier vb.)" />
-              <textarea value={productData.additionalImages} onChange={(e) => setProductData({...productData, additionalImages: e.target.value})} placeholder="Ekstra Resim Linkleri (Virgülle ayırın)" style={{height: '80px'}} />
+              <textarea value={productData.additionalImages} onChange={(e) => setProductData({...productData, additionalImages: e.target.value})} placeholder="Ekstra Resim Linkleri (Her satıra bir link)" style={{height: '80px'}} />
               <textarea value={productData.description} onChange={(e) => setProductData({...productData, description: e.target.value})} placeholder={t('admin.ph.desc')} />
               
               <div style={{ display: 'flex', gap: '10px' }}>
