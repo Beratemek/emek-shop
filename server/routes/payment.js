@@ -96,16 +96,25 @@ router.post('/checkout', async (req, res) => {
         throw new Error(response.data?.errorMessage || 'Token creation failed');
 
     } catch (error) {
-        console.error('[Payment] Error:', error.message);
+        console.error('[Payment] CRITICAL ERROR:', error);
+        console.error('[Payment] Stack:', error.stack);
+        
         if (error.response) {
-            console.error('[Payment] Gateway Response:', error.response.data);
+            console.error('[Payment] Gateway Response Status:', error.response.status);
+            console.error('[Payment] Gateway Response Data:', JSON.stringify(error.response.data, null, 2));
             return res.status(error.response.status).json({ 
-                message: 'Ödeme Servisi Hatası', 
+                message: 'Ödeme Servisi Hatası (Gateway)', 
                 details: error.response.data,
                 error: error.message
             });
         }
-        res.status(500).json({ message: 'Payment initiation failed', error: error.message });
+
+        // Return stack trace only for debugging (remove in production later)
+        res.status(500).json({ 
+            message: 'Internal Server Error during Payment', 
+            error: error.message,
+            stack: error.stack 
+        });
     }
 });
 
