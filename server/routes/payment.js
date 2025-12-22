@@ -59,13 +59,15 @@ router.post('/checkout', async (req, res) => {
         
         const headers = {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'User-Agent': 'EmekShop/1.0',
             'PG-Auth-Token': authToken
         };
 
         // 3. Prepare Payload
         const orderId = `ORD-${Date.now()}`;
         const payload = {
-            "Amount": parseFloat(totalAmount), // Send as Number
+            "Amount": parseFloat(totalAmount),
             "OrderID": orderId,
             "successCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=success", 
             "failCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=fail",
@@ -75,14 +77,16 @@ router.post('/checkout', async (req, res) => {
         };
 
         console.log('[Payment] Sending request to Tami Hosted API:', PAYMENT_CONFIG.endpoint);
-        console.log('[Payment] Request Payload:', JSON.stringify(payload, null, 2));
+        console.log('[Payment] Payload:', JSON.stringify(payload));
+        console.log('[Payment] Headers:', JSON.stringify(headers));
 
         const response = await axios.post(PAYMENT_CONFIG.endpoint, payload, { headers });
         
-        console.log('[Payment] Success Response:', response.data);
+        console.log('[Payment] Response Status:', response.status);
+        console.log('[Payment] Response Data:', response.data);
 
         // 4. Handle Response
-        if (response.data && response.data.success && response.data.oneTimeToken) {
+        if (response.data && response.data.oneTimeToken) {
              const redirectUrl = `https://portal.tami.com.tr/hostedPaymentPage?token=${response.data.oneTimeToken}`;
              return res.status(200).json({
                  success: true,
@@ -90,9 +94,13 @@ router.post('/checkout', async (req, res) => {
              });
         }
 
-        // If API returns success=false or no token, THROW FULL DETAILS
-        console.error('[Payment] FAILED Response:', JSON.stringify(response.data));
-        throw new Error('Tami Response: ' + JSON.stringify(response.data));
+        // If no token, throw with details
+        const debugInfo = {
+            status: response.status,
+            headers: response.headers,
+            data: response.data
+        };
+        throw new Error('Tami Empty/Invalid Response: ' + JSON.stringify(debugInfo));
 
     } catch (error) {
         console.error('[Payment] CRITICAL ERROR:', error);
