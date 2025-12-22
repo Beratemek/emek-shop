@@ -3,7 +3,7 @@ const axios = require('axios');
 const router = express.Router();
 
 // --- CONFIGURATION ---
-const USE_SIMULATION = true; // Set to false to enable Real Payments
+const USE_SIMULATION = false; // Set to false to enable Real Payments
 
 // Tami / Garanti BBVA Virtual POS Credentials
 // Note: In production, move these to environment variables
