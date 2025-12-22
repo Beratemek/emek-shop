@@ -1,91 +1,99 @@
+
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
+const crypto = require('crypto');
 
 // --- CONFIGURATION ---
 const USE_SIMULATION = false; // Set to false to enable Real Payments
 
-// Tami / Garanti BBVA Virtual POS Credentials
+// Tami / Garanti BBVA Credentials
 // Note: In production, move these to environment variables
 const PAYMENT_CONFIG = {
     merchantId: '77018370',
+    // Terminal ID is explicitly required for hash, but if unknown, some integrations use MerchantID or a specific value.
+    // Try using MerchantID as fallback if specific TerminalID is not provided.
+    terminalId: '77018370', 
     secretKey: 'a811da2b-5855-4302-aac1-c71b7cfd0c23',
-    kValue: 'KxiO5xEuF_9PIgEefMz0VJOWiu8vlX5kjNIjI3L9VUuIsj7kIA1oohS3RzwjnxQWTRmkK8ik7488ZMug3NQIgg=',
-    kidValue: '760bd3cc-0721-414d-aaf3-8ef9e50691b7',
-    // Endpoint discovered from docs: https://paymentapi.tami.com.tr
-    endpoint: process.env.TAMI_API_URL || 'https://paymentapi.tami.com.tr/v1/payment/checkout' 
+    endpoint: 'https://paymentapi.tami.com.tr/hosted/create-one-time-hosted-token'
 };
 
-// Create Payment Session / Mock Checkout
+// Helper: Generate SHA256 Hash -> Base64
+const generateHash = (merchantId, terminalId, secretKey) => {
+    try {
+        const rawString = merchantId + terminalId + secretKey;
+        const hash = crypto.createHash('sha256').update(rawString).digest('base64');
+        return hash;
+    } catch (error) {
+        console.error('Hash generation failed:', error);
+        return null;
+    }
+};
+
+// Create Payment Session (Hosted Page)
 router.post('/checkout', async (req, res) => {
     const { cart, user, totalAmount } = req.body;
 
-    console.log(`[Payment] Initiating Checkout (${USE_SIMULATION ? 'SIMULATION' : 'LIVE'}) for:`, {
-        merchantId: PAYMENT_CONFIG.merchantId,
-        amount: totalAmount,
-        userEmail: user?.email
-    });
+    console.log(`[Payment] Initiating Hosted Checkout (${USE_SIMULATION ? 'SIMULATION' : 'LIVE'})...`);
 
     try {
-        const payload = {
-            price: totalAmount,
-            paidPrice: totalAmount,
-            currency: 'TRY',
-            basketId: `ORD-${Date.now()}`,
-            paymentGroup: 'PRODUCT',
-            callbackUrl: 'http://localhost:5173/payment/callback',
-            buyer: {
-                id: user?.id || 'GUEST',
-                name: user?.name || 'Guest User',
-                surname: 'User',
-                email: user?.email || 'guest@example.com',
-                identityNumber: '11111111111',
-                registrationAddress: 'Test Address',
-                city: 'Istanbul',
-                country: 'Turkey'
-            },
-            billingAddress: {
-                contactName: user?.name || 'Guest User',
-                city: 'Istanbul',
-                country: 'Turkey',
-                address: 'Test Address'
-            },
-            basketItems: cart.map(item => ({
-                id: item._id,
-                name: item.name,
-                category1: item.category || 'General',
-                itemType: 'PHYSICAL',
-                price: item.price
-            }))
-        };
-
         // --- SIMULATION MODE ---
         if (USE_SIMULATION) {
-            console.log('[Payment] Simulating successful payment gateway response...');
-            setTimeout(() => {
+            return setTimeout(() => {
                 res.status(200).json({
                     status: 'success',
-                    message: 'Payment session created (Simulation)',
-                    redirectUrl: '/payment/success', 
-                    paymentId: `PAY-${Date.now()}-${Math.floor(Math.random() * 1000)}`
+                    message: 'Simulation Redirect',
+                    redirectUrl: '/payment/success' 
                 });
             }, 1000);
-            return;
         }
 
-        // --- LIVE MODE ---
+        // --- LIVE MODE: Hosted Payment Page ---
+        // 1. Calculate Hash
+        const hash = generateHash(PAYMENT_CONFIG.merchantId, PAYMENT_CONFIG.terminalId, PAYMENT_CONFIG.secretKey);
+        
+        // 2. Prepare Headers
+        // Header Format: MerchantNumber:TerminalNumber:Hash 
+        // (Removing 'ISYERINO' prefix unless specified by specific docs, usually it's just value)
+        const authToken = `${PAYMENT_CONFIG.merchantId}:${PAYMENT_CONFIG.terminalId}:${hash}`;
+        
         const headers = {
             'Content-Type': 'application/json',
-            'X-Merchant-Id': PAYMENT_CONFIG.merchantId,
-            'Authorization': `Bearer ${PAYMENT_CONFIG.secretKey}`, 
-            'X-K-Value': PAYMENT_CONFIG.kValue,
-            'X-Kid-Value': PAYMENT_CONFIG.kidValue
+            'PG-Auth-Token': authToken
         };
 
-        console.log('[Payment] Sending request to Tami API:', PAYMENT_CONFIG.endpoint);
+        // 3. Prepare Payload
+        const orderId = `ORD-${Date.now()}`;
+        const payload = {
+            "Amount": parseFloat(totalAmount).toFixed(2),
+            "OrderID": orderId,
+            "successCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=success", // Production URL
+            "failCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=fail",
+            // Mobile Phone is often mandatory for 3D/Hosted
+            "mobilePhoneNumber": user?.phone || "905555555555", 
+            "InstallmentCount": 1,
+            "Currency": "TRY"
+        };
+
+        console.log('[Payment] Sending request to Tami Hosted API:', PAYMENT_CONFIG.endpoint);
+        console.log('[Payment] Request Payload:', JSON.stringify(payload, null, 2));
+
         const response = await axios.post(PAYMENT_CONFIG.endpoint, payload, { headers });
+        
         console.log('[Payment] Success Response:', response.data);
-        return res.status(200).json(response.data);
+
+        // 4. Handle Response
+        // API returns a 'oneTimeToken'. We must redirect user to the portal with this token.
+        if (response.data && response.data.success && response.data.oneTimeToken) {
+             const redirectUrl = `https://portal.tami.com.tr/hostedPaymentPage?token=${response.data.oneTimeToken}`;
+             return res.status(200).json({
+                 success: true,
+                 redirectUrl: redirectUrl
+             });
+        }
+
+        // If API returns success=false or no token
+        throw new Error(response.data?.errorMessage || 'Token creation failed');
 
     } catch (error) {
         console.error('[Payment] Error:', error.message);
@@ -94,7 +102,7 @@ router.post('/checkout', async (req, res) => {
             return res.status(error.response.status).json({ 
                 message: 'Ödeme Servisi Hatası', 
                 details: error.response.data,
-                error: error.message 
+                error: error.message
             });
         }
         res.status(500).json({ message: 'Payment initiation failed', error: error.message });
