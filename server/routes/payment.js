@@ -89,6 +89,14 @@ router.post('/checkout', async (req, res) => {
 
     } catch (error) {
         console.error('[Payment] Error:', error.message);
+        if (error.response) {
+            console.error('[Payment] Gateway Response:', error.response.data);
+            return res.status(error.response.status).json({ 
+                message: 'Ödeme Servisi Hatası', 
+                details: error.response.data,
+                error: error.message 
+            });
+        }
         res.status(500).json({ message: 'Payment initiation failed', error: error.message });
     }
 });

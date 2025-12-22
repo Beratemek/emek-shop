@@ -38,9 +38,12 @@ const Cart = () => {
                  alert('Ödeme işleminiz başarıyla alındı. (Test/Simülasyon)');
                  navigate('/');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert('Ödeme başlatılamadı. Lütfen tekrar deneyiniz.');
+            const errorMessage = error.response?.data?.details 
+                ? JSON.stringify(error.response.data.details) 
+                : (error.response?.data?.message || error.message);
+            alert(`Ödeme Hatası: ${errorMessage}`);
         } finally {
             setIsProcessing(false);
         }
