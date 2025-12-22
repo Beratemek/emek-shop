@@ -40,10 +40,21 @@ const Cart = () => {
             }
         } catch (error: any) {
             console.error(error);
-            const errorMessage = error.response?.data?.details 
-                ? JSON.stringify(error.response.data.details) 
-                : (error.response?.data?.message || error.message);
-            alert(`Ödeme Hatası: ${errorMessage}`);
+            // DEBUG: Show full technical error details from backend
+            const backendError = error.response?.data?.error;
+            const backendMessage = error.response?.data?.message;
+            const details = error.response?.data?.details;
+            
+            let displayMessage = backendMessage || error.message;
+            
+            if (backendError) {
+                displayMessage += `\n\nTeknik Hata: ${backendError}`;
+            }
+            if (details) {
+                displayMessage += `\n\nDetay: ${JSON.stringify(details)}`;
+            }
+
+            alert(`Ödeme Hatası:\n${displayMessage}`);
         } finally {
             setIsProcessing(false);
         }
