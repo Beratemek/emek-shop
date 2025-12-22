@@ -44,7 +44,7 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
             </span>
             {product.price.toFixed(2)} TL
           </div>
-          <button className="add-to-cart-btn" onClick={handlePayment} style={{ background: '#22c55e' }}>
+          <button className="add-to-cart-btn" onClick={handlePayment}>
             <CreditCard size={16} />
             Hemen Öde
           </button>

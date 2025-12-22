@@ -86,7 +86,7 @@ const ProductDetails = () => {
                         } else {
                             alert('Bu ürün için ödeme linki henüz eklenmedi. Lütfen daha sonra tekrar deneyiniz.');
                         }
-                    }} style={{ background: '#22c55e' }}>
+                    }}>
                         <CreditCard size={24} />
                         Hemen Öde
                     </button>
