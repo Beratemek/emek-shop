@@ -37,3 +37,6 @@ export const createOrder = (orderData: any) => API.post('/orders', orderData);
 export const createMessage = (messageData: any) => API.post('/messages', messageData);
 export const fetchMessages = () => API.get('/messages');
 export const deleteMessage = (id: string) => API.delete(`/messages/${id}`);
+
+export const checkout = (checkoutData: any) => API.post('/payment/checkout', checkoutData);
+

@@ -1,12 +1,50 @@
+import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
 import { Trash2, ArrowLeft, ArrowRight, Truck, ShieldCheck } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { checkout } from '../api';
 import './Cart.css';
 
 const Cart = () => {
-    const { cart, removeFromCart, updateQuantity, total } = useCart();
+    const { cart, removeFromCart, updateQuantity, total, clearCart } = useCart();
     const { t } = useLanguage();
+    const navigate = useNavigate();
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const handleCheckout = async () => {
+        setIsProcessing(true);
+        try {
+            // Get user from local storage if available
+            const user = JSON.parse(localStorage.getItem('profile') || '{}')?.result;
+            
+            const response = await checkout({
+                cart,
+                totalAmount: total,
+                user
+            });
+
+            if (response.data?.redirectUrl) {
+                // If 3D secure or external page
+                // window.location.href = response.data.redirectUrl; 
+                // For simulation/SPA flow:
+                 clearCart();
+                 // In a real scenario, we might go to an external URL. 
+                 // For this v1 integration with simulation:
+                 alert('Ödeme Başarılı! (Simülasyon)');
+                 navigate('/');
+            } else {
+                 clearCart();
+                 alert('Ödeme işleminiz başarıyla alındı. (Test/Simülasyon)');
+                 navigate('/');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Ödeme başlatılamadı. Lütfen tekrar deneyiniz.');
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
     if (cart.length === 0) {
         return (
@@ -57,8 +95,9 @@ const Cart = () => {
                     <div className="total-amount">
                         {total.toFixed(2)} TL
                     </div>
-                    <button className="checkout-btn">
-                        {t('cart.checkout')} <ArrowRight size={20} />
+                    <button className="checkout-btn" onClick={handleCheckout} disabled={isProcessing}>
+                        {isProcessing ? 'İşleniyor...' : t('cart.checkout')} 
+                        {!isProcessing && <ArrowRight size={20} />}
                     </button>
                     
                     <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem', color: '#94a3b8' }}>

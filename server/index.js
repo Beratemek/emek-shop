@@ -26,6 +26,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 const messageRoutes = require('./routes/messages');
 app.use('/api/messages', messageRoutes);
+const paymentRoutes = require('./routes/payment');
+app.use('/api/payment', paymentRoutes);
 
 // --- Public Product Routes ---
 app.get('/api/products', async (req, res) => {
