@@ -65,42 +65,49 @@ router.post('/checkout', async (req, res) => {
         };
 
         // 3. Prepare Payload
+        // Attempting standard camelCase keys as 200 OK empty body often implies schema mismatch
         const orderId = `ORD-${Date.now()}`;
+        
+        // Ensure amount is string "1.00"
+        const amountStr = parseFloat(totalAmount).toFixed(2);
+
         const payload = {
-            "Amount": parseFloat(totalAmount),
-            "OrderID": orderId,
+            "amount": amountStr,
+            "orderId": orderId,
             "successCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=success", 
             "failCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=fail",
             "mobilePhoneNumber": user?.phone || "905555555555", 
-            "InstallmentCount": 1,
-            "Currency": "TRY"
+            "installmentCount": 1,
+            "currency": "TRY"
         };
+        
+        // Also prepare PascalCase version in case the docs were literally correct and strict
+        // But let's try camelCase first as it's more standard for Tami new API. 
+        // NOTE: If this fails, we strongly suspect TerminalID is invalid.
 
-        console.log('[Payment] Sending request to Tami Hosted API:', PAYMENT_CONFIG.endpoint);
+        console.log('[Payment] Generated Hash:', hash);
+        console.log('[Payment] Auth Token:', authToken);
         console.log('[Payment] Payload:', JSON.stringify(payload));
-        console.log('[Payment] Headers:', JSON.stringify(headers));
 
         const response = await axios.post(PAYMENT_CONFIG.endpoint, payload, { headers });
         
         console.log('[Payment] Response Status:', response.status);
-        console.log('[Payment] Response Data:', response.data);
+        console.log('[Payment] Response Data:', JSON.stringify(response.data));
 
         // 4. Handle Response
-        if (response.data && response.data.oneTimeToken) {
-             const redirectUrl = `https://portal.tami.com.tr/hostedPaymentPage?token=${response.data.oneTimeToken}`;
+        // Check for token in standard property or check if response itself is the token string
+        const token = response.data?.oneTimeToken || (typeof response.data === 'string' && response.data.length > 20 ? response.data : null);
+
+        if (token) {
+             const redirectUrl = `https://portal.tami.com.tr/hostedPaymentPage?token=${token}`;
              return res.status(200).json({
                  success: true,
                  redirectUrl: redirectUrl
              });
         }
 
-        // If no token, throw with details
-        const debugInfo = {
-            status: response.status,
-            headers: response.headers,
-            data: response.data
-        };
-        throw new Error('Tami Empty/Invalid Response: ' + JSON.stringify(debugInfo));
+        // If Tami returns 200 but empty/invalid data, it implies successful connection but failed logic (e.g. Hash mismatch silently ignored?)
+        throw new Error(`Tami API returned ${response.status} but no token. Check TerminalID or Payload format. Data: ${JSON.stringify(response.data)}`);
 
     } catch (error) {
         console.error('[Payment] CRITICAL ERROR:', error);
