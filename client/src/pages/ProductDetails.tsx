@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProduct } from '../api';
 // import { useLanguage } from '../context/LanguageContext';
 // import { useCart } from '../context/CartContext';
-import { CreditCard, ArrowLeft, Truck, ShieldCheck } from 'lucide-react';
+import { CreditCard, ArrowLeft, Truck, ShieldCheck, Package } from 'lucide-react';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
@@ -93,12 +93,22 @@ const ProductDetails = () => {
 
                     <div className="detail-features">
                         <div className="feature-item">
-                            <Truck size={20} color="#fbbf24" />
-                            <span>Hızlı Teslimat</span>
+                            <div className="feature-icon">
+                                <Package size={32} color="#fbbf24" />
+                            </div>
+                            <span className="feature-text">Ücretsiz Kargo</span>
                         </div>
                         <div className="feature-item">
-                            <ShieldCheck size={20} color="#fbbf24" />
-                            <span>Güvenli Ödeme</span>
+                            <div className="feature-icon">
+                                <Truck size={32} color="#fbbf24" />
+                            </div>
+                            <span className="feature-text">Hızlı Teslimat</span>
+                        </div>
+                        <div className="feature-item">
+                            <div className="feature-icon">
+                                <ShieldCheck size={32} color="#fbbf24" />
+                            </div>
+                            <span className="feature-text">Güvenli Ödeme</span>
                         </div>
                     </div>
                 </div>

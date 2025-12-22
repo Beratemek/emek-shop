@@ -94,17 +94,41 @@
 .detail-features {
     margin-top: 30px;
     display: flex;
-    gap: 30px;
+    gap: 20px;
     border-top: 1px solid rgba(255,255,255,0.1);
     padding-top: 30px;
 }
 
 .feature-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding: 20px;
+    background: rgba(251, 191, 36, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(251, 191, 36, 0.1);
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: rgba(251, 191, 36, 0.1);
+    border-color: rgba(251, 191, 36, 0.3);
+    transform: translateY(-3px);
+}
+
+.feature-icon {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: #94a3b8;
-    font-size: 0.9rem;
+    justify-content: center;
+}
+
+.feature-text {
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
 /* Thumbnails */
