@@ -65,11 +65,10 @@ router.post('/checkout', async (req, res) => {
         // 3. Prepare Payload
         const orderId = `ORD-${Date.now()}`;
         const payload = {
-            "Amount": parseFloat(totalAmount).toFixed(2),
+            "Amount": parseFloat(totalAmount), // Send as Number
             "OrderID": orderId,
-            "successCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=success", // Production URL
+            "successCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=success", 
             "failCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=fail",
-            // Mobile Phone is often mandatory for 3D/Hosted
             "mobilePhoneNumber": user?.phone || "905555555555", 
             "InstallmentCount": 1,
             "Currency": "TRY"
@@ -83,7 +82,6 @@ router.post('/checkout', async (req, res) => {
         console.log('[Payment] Success Response:', response.data);
 
         // 4. Handle Response
-        // API returns a 'oneTimeToken'. We must redirect user to the portal with this token.
         if (response.data && response.data.success && response.data.oneTimeToken) {
              const redirectUrl = `https://portal.tami.com.tr/hostedPaymentPage?token=${response.data.oneTimeToken}`;
              return res.status(200).json({
@@ -92,8 +90,9 @@ router.post('/checkout', async (req, res) => {
              });
         }
 
-        // If API returns success=false or no token
-        throw new Error(response.data?.errorMessage || 'Token creation failed');
+        // If API returns success=false or no token, THROW FULL DETAILS
+        console.error('[Payment] FAILED Response:', JSON.stringify(response.data));
+        throw new Error('Tami Response: ' + JSON.stringify(response.data));
 
     } catch (error) {
         console.error('[Payment] CRITICAL ERROR:', error);
