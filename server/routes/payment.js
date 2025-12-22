@@ -23,6 +23,8 @@ const generateHash = (merchantId, terminalId, secretKey) => {
     try {
         const rawString = merchantId + terminalId + secretKey;
         const hash = crypto.createHash('sha256').update(rawString).digest('base64');
+        console.log('[Hash Debug] Raw:', rawString); // DO NOT LOG IN PRODUCTION
+        console.log('[Hash Debug] Hash:', hash);
         return hash;
     } catch (error) {
         console.error('Hash generation failed:', error);
