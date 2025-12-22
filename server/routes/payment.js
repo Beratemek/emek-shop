@@ -12,8 +12,8 @@ const PAYMENT_CONFIG = {
     secretKey: 'a811da2b-5855-4302-aac1-c71b7cfd0c23',
     kValue: 'KxiO5xEuF_9PIgEefMz0VJOWiu8vlX5kjNIjI3L9VUuIsj7kIA1oohS3RzwjnxQWTRmkK8ik7488ZMug3NQIgg=',
     kidValue: '760bd3cc-0721-414d-aaf3-8ef9e50691b7',
-    // Potential API Endpoint - needs verification from specific Tami docs app
-    endpoint: 'https://api.tami.com.tr/v1/payment/checkout' 
+    // Potential API Endpoint - defined in .env or default
+    endpoint: process.env.TAMI_API_URL || 'https://api.tami.com.tr/v1/payment/checkout' 
 };
 
 // Create Payment Session / Mock Checkout
