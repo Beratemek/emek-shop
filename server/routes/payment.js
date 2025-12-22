@@ -66,19 +66,18 @@ router.post('/checkout', async (req, res) => {
 
         // 3. Prepare Payload
         // Attempting standard camelCase keys as 200 OK empty body often implies schema mismatch
+        // 3. Prepare Payload
+        // Reverting to strict Mixed Case as seen in documentation (Step 309)
         const orderId = `ORD-${Date.now()}`;
         
-        // Ensure amount is string "1.00"
-        const amountStr = parseFloat(totalAmount).toFixed(2);
-
         const payload = {
-            "amount": amountStr,
-            "orderId": orderId,
+            "Amount": parseFloat(totalAmount), // Number format as per standard JSON practices unless quoted
+            "OrderID": orderId,
             "successCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=success", 
             "failCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=fail",
-            "mobilePhoneNumber": user?.phone || "905555555555", 
-            "installmentCount": 1,
-            "currency": "TRY"
+            "mobilePhoneNumber": user?.phone || "9055555555", // Adjusted Mock Phone
+            "InstallmentCount": 1,
+            "Currency": "TRY"
         };
         
         // Also prepare PascalCase version in case the docs were literally correct and strict
