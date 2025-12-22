@@ -67,17 +67,17 @@ router.post('/checkout', async (req, res) => {
         // 3. Prepare Payload
         // Attempting standard camelCase keys as 200 OK empty body often implies schema mismatch
         // 3. Prepare Payload
-        // Reverting to strict Mixed Case as seen in documentation (Step 309)
+        // Reverting to Standard camelCase (Modern Tami API)
         const orderId = `ORD-${Date.now()}`;
         
         const payload = {
-            "Amount": parseFloat(totalAmount), // Number format as per standard JSON practices unless quoted
-            "OrderID": orderId,
+            "amount": parseFloat(totalAmount).toFixed(2), 
+            "orderId": orderId,
             "successCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=success", 
             "failCallbackUrl": "https://emek-shop-production.up.railway.app/api/payment/callback?status=fail",
-            "mobilePhoneNumber": user?.phone || "9055555555", // Adjusted Mock Phone
-            "InstallmentCount": 1,
-            "Currency": "TRY"
+            "mobilePhoneNumber": user?.phone || "9055555555", 
+            "installmentCount": 1,
+            "currency": "TRY"
         };
         
         // Also prepare PascalCase version in case the docs were literally correct and strict
