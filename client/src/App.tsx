@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 // import { CartProvider } from './context/CartContext';
@@ -96,6 +96,7 @@ function App() {
                  <Route path="/about" element={<About />} />
                  <Route path="/contact" element={<Contact />} />
                  <Route path="/profile" element={<Profile />} />
+                 <Route path="/cart" element={<Navigate to="/" replace />} />
                  <Route path="/login" element={<Auth isSignup={false} />} />
                  <Route path="/register" element={<Auth isSignup={true} />} />
                  <Route path="/auth" element={<Auth isSignup={false} />} />
