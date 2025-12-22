@@ -15,7 +15,7 @@ const Admin = () => {
   
   // Product Form State
   const [currentId, setCurrentId] = useState<string | null>(null);
-  const [productData, setProductData] = useState({ name: '', price: '', description: '', image: '', additionalImages: '', category: '' });
+  const [productData, setProductData] = useState({ name: '', price: '', description: '', image: '', additionalImages: '', category: '', paymentLink: '' });
 
   useEffect(() => {
     if (activeTab === 'products') loadProducts();
@@ -62,7 +62,7 @@ const Admin = () => {
 
   const clearForm = () => {
       setCurrentId(null);
-      setProductData({ name: '', price: '', description: '', image: '', additionalImages: '', category: '' });
+      setProductData({ name: '', price: '', description: '', image: '', additionalImages: '', category: '', paymentLink: '' });
   };
 
   const handleEdit = (product: any) => {
@@ -73,7 +73,8 @@ const Admin = () => {
         description: product.description, 
         image: product.image,
         additionalImages: product.additionalImages ? product.additionalImages.join(', ') : '',
-        category: product.category 
+        category: product.category,
+        paymentLink: product.paymentLink || ''
       });
       // Scroll to top of form
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -128,6 +129,7 @@ const Admin = () => {
               <input value={productData.price} onChange={(e) => setProductData({...productData, price: e.target.value})} placeholder={t('admin.ph.price')} type="number" required />
               <input value={productData.category} onChange={(e) => setProductData({...productData, category: e.target.value})} placeholder={t('admin.ph.category')} />
               <input value={productData.image} onChange={(e) => setProductData({...productData, image: e.target.value})} placeholder={t('admin.ph.image')} />
+              <input value={productData.paymentLink} onChange={(e) => setProductData({...productData, paymentLink: e.target.value})} placeholder="Ödeme Linki (Tami/Shopier vb.)" />
               <textarea value={productData.additionalImages} onChange={(e) => setProductData({...productData, additionalImages: e.target.value})} placeholder="Ekstra Resim Linkleri (Virgülle ayırın)" style={{height: '80px'}} />
               <textarea value={productData.description} onChange={(e) => setProductData({...productData, description: e.target.value})} placeholder={t('admin.ph.desc')} />
               

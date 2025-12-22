@@ -1,6 +1,6 @@
-import { ShoppingCart } from 'lucide-react';
+import { ExternalLink, CreditCard } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { useCart } from '../context/CartContext';
+// import { useCart } from '../context/CartContext'; // Cart disabled for now
 import './ProductCard.css';
 
 interface ProductProps {
@@ -9,13 +9,22 @@ interface ProductProps {
   price: number;
   image: string;
   category?: string;
+  paymentLink?: string;
 }
 
 import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }: { product: ProductProps }) => {
   const { t } = useLanguage();
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart(); 
+
+  const handlePayment = () => {
+      if (product.paymentLink) {
+          window.location.href = product.paymentLink;
+      } else {
+          alert('Bu ürün için ödeme linki henüz eklenmedi. Lütfen daha sonra tekrar deneyiniz.');
+      }
+  };
 
   return (
     <div className="product-card glass">
@@ -35,9 +44,9 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
             </span>
             {product.price.toFixed(2)} TL
           </div>
-          <button className="add-to-cart-btn" onClick={() => addToCart(product)}>
-            <ShoppingCart size={16} />
-            {t('product.addToCart')}
+          <button className="add-to-cart-btn" onClick={handlePayment} style={{ background: '#22c55e' }}>
+            <CreditCard size={16} />
+            Hemen Öde
           </button>
         </div>
       </div>
@@ -46,3 +55,5 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
 };
 
 export default ProductCard;
+
+
