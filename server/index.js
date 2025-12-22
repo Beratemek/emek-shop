@@ -59,7 +59,17 @@ const adminMiddleware = async (req, res, next) => {
 
 // --- Product Management (Admin) ---
 app.post('/api/products', async (req, res) => {
-  const product = req.body;
+  let product = req.body;
+  
+  // Ensure additionalImages is an array
+  if (product.additionalImages && !Array.isArray(product.additionalImages)) {
+    if (typeof product.additionalImages === 'string') {
+      product.additionalImages = product.additionalImages.split(',').map(url => url.trim()).filter(url => url.length > 0);
+    } else {
+      product.additionalImages = [];
+    }
+  }
+  
   const newProduct = new Product(product);
   try {
     await newProduct.save();
@@ -71,11 +81,21 @@ app.post('/api/products', async (req, res) => {
 
 app.put('/api/products/:id', async (req, res) => {
   const { id } = req.params;
-  const { name, price, description, image, additionalImages, category, isFeatured } = req.body;
+  let { name, price, description, image, additionalImages, category, isFeatured, paymentLink } = req.body;
   
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No product with id: ${id}`);
 
-  const updatedProduct = { name, price, description, image, additionalImages, category, isFeatured, _id: id };
+  // Ensure additionalImages is an array
+  if (additionalImages && !Array.isArray(additionalImages)) {
+    // If it's a string, split by comma
+    if (typeof additionalImages === 'string') {
+      additionalImages = additionalImages.split(',').map(url => url.trim()).filter(url => url.length > 0);
+    } else {
+      additionalImages = [];
+    }
+  }
+
+  const updatedProduct = { name, price, description, image, additionalImages, category, isFeatured, paymentLink, _id: id };
   await Product.findByIdAndUpdate(id, updatedProduct, { new: true });
   res.json(updatedProduct);
 });
