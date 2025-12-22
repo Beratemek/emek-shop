@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProduct } from '../api';
-import { useLanguage } from '../context/LanguageContext';
+// import { useLanguage } from '../context/LanguageContext';
 // import { useCart } from '../context/CartContext';
 import { CreditCard, ArrowLeft, Truck, ShieldCheck } from 'lucide-react';
 import './ProductDetails.css';
@@ -9,7 +9,7 @@ import './ProductDetails.css';
 const ProductDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { t } = useLanguage();
+    // const { t } = useLanguage();
     // const { addToCart } = useCart();
     const [product, setProduct] = useState<any>(null);
     const [loading, setLoading] = useState(true);

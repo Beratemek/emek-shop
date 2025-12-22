@@ -1,4 +1,4 @@
-import { ExternalLink, CreditCard } from 'lucide-react';
+import { CreditCard } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 // import { useCart } from '../context/CartContext'; // Cart disabled for now
 import './ProductCard.css';
