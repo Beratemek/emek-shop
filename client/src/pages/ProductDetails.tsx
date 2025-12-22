@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProduct } from '../api';
 import { useLanguage } from '../context/LanguageContext';
-import { useCart } from '../context/CartContext';
-import { ShoppingCart, ArrowLeft, Truck, ShieldCheck } from 'lucide-react';
+// import { useCart } from '../context/CartContext';
+import { CreditCard, ArrowLeft, Truck, ShieldCheck } from 'lucide-react';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { t } = useLanguage();
-    const { addToCart } = useCart();
+    // const { addToCart } = useCart();
     const [product, setProduct] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -80,9 +80,15 @@ const ProductDetails = () => {
                     
                     <p className="detail-desc">{product.description || 'Bu ürün için açıklama bulunmuyor.'}</p>
                     
-                    <button className="add-to-cart-btn large" onClick={() => addToCart(product)}>
-                        <ShoppingCart size={24} />
-                        {t('product.addToCart')}
+                    <button className="add-to-cart-btn large" onClick={() => {
+                        if (product.paymentLink) {
+                            window.location.href = product.paymentLink;
+                        } else {
+                            alert('Bu ürün için ödeme linki henüz eklenmedi. Lütfen daha sonra tekrar deneyiniz.');
+                        }
+                    }} style={{ background: '#22c55e' }}>
+                        <CreditCard size={24} />
+                        Hemen Öde
                     </button>
 
                     <div className="detail-features">

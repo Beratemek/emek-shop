@@ -1,17 +1,17 @@
-import { ShoppingCart, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { User, LogOut, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import { useCart } from '../context/CartContext';
+// import { useCart } from '../context/CartContext'; // Disabled
 import { Link } from 'react-router-dom';
-import { useState } from 'react'; // Added useState import
+import { useState } from 'react'; 
 import './Navbar.css';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { t, language, setLanguage } = useLanguage();
-  const { itemCount } = useCart();
+  // const { itemCount } = useCart(); // Disabled
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Added state for mobile menu
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => { // Added toggle function for mobile menu
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -30,10 +30,6 @@ const Navbar = () => {
 
         {/* Mobile Menu Button - Moved to right side via CSS order or placement */}
         <div className="mobile-actions">
-            <Link to="/cart" className="cart-btn mobile-cart">
-              <ShoppingCart size={20} />
-              {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
-            </Link>
             <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
               <span className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}></span>
             </button>
@@ -73,10 +69,6 @@ const Navbar = () => {
             )}
           </div>
 
-          <Link to="/cart" className="cart-btn">
-            <ShoppingCart size={20} />
-            {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
-          </Link>
         </div>
 
         {/* Mobile Menu Overlay */}

@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
-import { CartProvider } from './context/CartContext';
+// import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
 import SnowEffect from './components/SnowEffect';
 import ProductCard from './components/ProductCard';
@@ -77,7 +77,7 @@ import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
 import ResetPassword from './pages/ResetPassword';
 import Profile from './pages/Profile';
-import Cart from './pages/Cart';
+// import Cart from './pages/Cart';
 
 // ... existing Home component ...
 
@@ -86,7 +86,6 @@ function App() {
     <BrowserRouter>
       <LanguageProvider>
         <AuthProvider>
-          <CartProvider>
             <div className="app">
               <SnowEffect />
               <Navbar />
@@ -96,9 +95,7 @@ function App() {
                  <Route path="/product/:id" element={<ProductDetails />} />
                  <Route path="/about" element={<About />} />
                  <Route path="/contact" element={<Contact />} />
-                 <Route path="/contact" element={<Contact />} />
                  <Route path="/profile" element={<Profile />} />
-                 <Route path="/cart" element={<Cart />} />
                  <Route path="/login" element={<Auth isSignup={false} />} />
                  <Route path="/register" element={<Auth isSignup={true} />} />
                  <Route path="/auth" element={<Auth isSignup={false} />} />
@@ -106,7 +103,6 @@ function App() {
                  <Route path="/admin" element={<Admin />} />
               </Routes>
             </div>
-          </CartProvider>
         </AuthProvider>
       </LanguageProvider>
     </BrowserRouter>
