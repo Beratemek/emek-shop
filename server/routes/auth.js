@@ -7,7 +7,7 @@ const sendEmail = require('../utils/sendEmail');
 
 const router = express.Router();
 
-const SECRET = 'test_secret_key'; // In prod, put in .env
+const SECRET = process.env.JWT_SECRET || 'test_secret_key_CHANGE_IN_PRODUCTION';
 
 // Register
 router.post('/register', async (req, res) => {
